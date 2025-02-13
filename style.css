@@ -68,6 +68,23 @@ section {
      width: 25%;
      float: left;
 }
+
+.viewer-container {
+    width: 100%;
+    height: 40vh;
+    flex: 0 0 33.3%;
+}
+
+.carousel-container {
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+}
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
+}
+
 .col-3 {
      width: 33%;
      float: left;
@@ -83,6 +100,10 @@ section {
     font-size: 18px;
     display: flex;
     justify-content: center;
+}
+
+.controls {
+    margin-top: 10px;
 }
 .row {
     margin: 16px 0px 16px 0px;

@@ -2,23 +2,187 @@
 <html lang="en" xmlns="http://www.w3.org/1999/html">
 
 <head>
-    <title>FacadeNet</title>
-    <meta property="og:description" content="A deep learning approach for
-    synthesizing building facade images from diverse viewpoints."/>
+    <title>Im2SurfTex</title>
+    <meta property="og:description" content="A neural backprojection approach for high resolution seamless texturing"/>
     <link rel="stylesheet" type="text/css" href="style.css"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" rel="stylesheet"/>
     <link rel="apple-touch-icon" sizes="180x180" href="gh-page/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="gh-page/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="gh-page/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="gh-page/favicon-16x16.png">
+    <script type="module" src="./main.js"></script>
+    <!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>-->
 <!--    <link rel="manifest" href="gh-page/favicon/site.webmanifest">-->
 </head>
 
 <body>
 <div class="container">
     <div class="paper-title">
-      <h1>FacadeNet: Im2SurfTex</h1>
+      <h1>Im2SurfTex: Surface Texture Generation via Neural Backprojection of Multi-View Images</h1>
+<!--      <h4><a href="https://doi.org/10.1111/cgf.14909">Computer Graphics Forum (Proc. SGP) 2023</a></h4>-->
     </div>
+
+    <div id="authors">
+        <div class="author-row">
+            <div class="col-4 text-center"><a href="https://ygeorg01.github.io/">Yiangos Georgiou</a><sup>1,2</sup></div>
+            <div class="col-4 text-center"><a href="https://marios2019.github.io/">Marios Loizou</a><sup>1,2,3</sup></div>
+            <div class="col-4 text-center"><a href="https://melinos.github.io/">Melinos Averkiou</a><sup>1,2</sup></div>
+            <div class="col-4 text-center"><a href="https://kalo-ai.github.io/">Evangelos Kalogerakis</a><sup>2,3</sup></div>
+        </div>
+
+        <div class="affil-row">
+            <div class="col-3 text-center"><sup>1</sup>Univesity of Cyprus</div>
+            <div class="col-3 text-center"><sup>2</sup>CYENS CoE</div>
+            <div class="col-3 text-center"><sup>3</sup>Technical University of Crete</div>
+        </div>
+    </div>
+
+    <div style="clear: both">
+            <div class="paper-btn-parent">
+                <a class="supp-btn" href="">
+                    <span class="material-icons"> article </span>
+                     Paper
+                </a>
+<!--                <a class="supp-btn" href="assets/CSN_presentation.pdf">-->
+<!--                    <span class="material-icons"> slideshow </span>-->
+<!--                    PPT at SGP-->
+<!--                </a>-->
+                <a class="supp-btn" href="">
+                    <span class="material-icons"> format_quote </span>
+                      BibTeX
+                </a>
+                <a class="supp-btn" href="">
+                    <span class="material-icons"> code </span>
+                      Code
+                </a>
+            </div>
+        </div>
+    <br>
+    <section id="teaser">
+        <a href="gh-page/teaser.png"><img width="100%" src="gh-page/teaser.png"></a>
+        <br>
+        <p class="caption" style="text-align: justify">Given a text prompt and an untextured 3D shape,Im2SurfTex generates a texture for it by learning to backproject images produced by text-to-image (T2I) diffusion models to the shape's texture space.
+    <em>Left:</em> Im2SurfTex diminishes artifacts on surfaces with self-occlusions and complex geometry, preserving finer details where alternatives like Paint3D struggle, resulting in
+            backprojection issues, such as the guard grill's texture appearing on the candle inside the lantern. <em>Right:</em> Im2SurfTex prevents
+            seam formation on high-curvature surfaces and seamlessly blends multiple views. In contrast, other approaches, such as
+            MatAtlas, often introduce texture discontinuities, as seen on the  apple, or fail to resolve multi-view inconsistencies,
+            leading to visible artifacts, as in the teapot.
+        </p>
+        <br>
+    </section>
+        <br>
+    <section id="abstract"/>
+        <h2>Abstract</h2>
+        <hr>
+        <p>
+            We present Im2SurfTex, a method that generates textures for input 3D shapes by learning to aggregate multi-view image outputs
+            produced by 2D image diffusion models onto the shapes’ texture space. Unlike existing texture generation techniques that use
+            ad hoc backprojection and averaging schemes to blend multiview images into textures, often resulting in texture seams and
+            artifacts, our approach employs a trained, feedforward neural module to boost texture coherency. The key ingredient of our
+            module is to leverage neural attention and appropriate positional encodings of image pixels based on their corresponding
+            3D point positions, normals, and surface-aware coordinates as encoded in geodesic distances within surface patches. These
+            encodings capture texture correlations between neighboring surface points, ensuring better texture continuity. Experimental
+            results show that our module improves texture quality, achieving superior performance in high-resolution texture generation.
+        </p>
+        <hr>
+        <p align="center">
+        <a href="gh-page/gallery.png"><img width="100%" src="gh-page/gallery.png"></a>
+        </p>
+        <p class="caption" style="text-align: justify">A gallery of 3D shapes across various categories, showcasing high-resolution, seamless, and coherent textures generated by
+                Im2SurfTex.
+        </p>
+    </section>
+
+    <br>
+    <section id="method"/>
+        <h2>Method Overview</h2>
+        <hr>
+        <a href="gh-page/network.png"><img width="100%" src="gh-page/network.png"></a>
+        <p>
+            Top) The Im2SurfTex, pipeline utilizes depth images and a text prompt to generate a number of candidate views (RGB images)
+            for a given shape. The views are aggregated through a learned backprojection module that incorporates geometric information, such as 3D
+            location, normals, angles between normals, and view vectors, as well as geodesic neighborhood information (bottom right) of shape points
+            corresponding to pixels of the generated RGB images. The backprojection module integrates several cross-attention blocks (bottom left) used
+            to infer texel features and colors from the appearance and geometric information gathered from relevant, non-background pixels across all
+            available views. As some texels may remain uncolored, an inpainting and high-definition (HD) module is applied to refine the texture map
+            following Paint3D
+        </p>
+    </section>
+<!--    <section id="qual_results"/>-->
+<!--        <h2>Qualitative Results</h2>-->
+<!--        <hr>-->
+<!--        <h4 align="center">View Interpolation</h4>-->
+<!--        <figure style="width: 100%;">-->
+<!--            <a href="gh-page/qual_eval.png"><img width="100%" src="gh-page/qual_eval.png"></a>-->
+<!--            <p class="caption" style="margin-bottom: 1px; text-align: justify">-->
+<!--                Examples of 5-step image interpolation on the horizontal axis. Given the reference images (left column), we can reconstruct the-->
+<!--novel view from different angles as it is illustrated in the images of columns 2-6.-->
+<!--            </p>-->
+<!--        </figure>-->
+<!--    <h4 align="center">Problematic View Improvment</h4>-->
+<!--        <figure style="width: 100%;">-->
+<!--            <a href="gh-page/view_improvment.png"><img width="100%" src="gh-page/view_improvment.png"></a>-->
+<!--            <p class="caption" style="margin-bottom: 1px; text-align: justify">-->
+<!--                We display examples of problematic facade image improvement. We display pairs of the reference images-->
+<!--                (left) and the θ 0 (center image) reconstruction images(right). We observe that our model can rotate-->
+<!--                the facade to a better view orientation in contrast to the reference while at the same time,-->
+<!--                it achieves a high similarity of style and structure.-->
+<!--            </p>-->
+<!--        </figure>-->
+<!--    </section>-->
+
+<!--    <section id="evaluation"/>-->
+<!--        <h2>Evaluation</h2>-->
+<!--        <hr>-->
+<!--        <figure style="width: 100%;">-->
+<!--            <a href="gh-page/evaluation.png"><img width="100%" src="gh-page/evaluation.png"></a>-->
+<!--            <p class="caption" style="margin-bottom: 1px; text-align: justify">-->
+<!--                This table presents a comprehensive comparison between our model baseline FacadeNet base, StyleGAN2, Palette,-->
+<!--                3DGP, swapping-autoencoder and FacadeNet. The results clearly demonstrate the superiority of our task-specific-->
+<!--                model across various evaluation criteria, including reconstruction quality, novel view synthesis quality,-->
+<!--                and consistency. To assess the reconstruction image quality, we employ FIDrec, PSNR, and SSIM metrics.-->
+<!--                Regarding novel view image quality we rely on FIDnovel, while we measure the inter-view consistency with-->
+<!--                LPIPS−{alex, vgg} metrics. Our final model FacadeNet outperforms previous approaches by a significant margin.-->
+<!--            </p>-->
+<!--        </figure>-->
+<!--    </section>-->
+<!--    <div class="col-4" id="container3D"></div>-->
+    <br>
+    <section id="Paint3d"/>
+    <h2>Generated Texture Archive</h2>
+    <hr>
+    <div class="carousel-container">
+        <div class="carousel" id="carousel">
+            <!-- Dynamic viewer containers will be added here -->
+        </div>
+    </div>
+    <div class="controls">
+        <button id="prev">⬅️ prev</button>
+        <button id="next">➡️ next</button>
+    </div>
+    </section>
+    <br>
+    <section id="paper">
+        <h2>Paper</h2>
+        <hr>
+        <div class="flex-row">
+            <div style="box-sizing: border-box; padding: 16px; margin: auto;">
+                <a href=""><img class="paper-thumbnail" src="gh-page/paper_thumbnail.png"></a>
+            </div>
+            <div style="width: 50%">
+                <p><b>Im2SurfTex: Surface Texture Generation via Neural Backprojection of Multi-View Images</b></p>
+                <p>Yiangos Georgiou, Marios Loizou, Melinos Averkiou and Evangelos Kalogerakis</p>
+
+                <div><span class="material-icons"> picture_as_pdf </span><a href="">PDF</a></div>
+<!--                <div><span class="material-icons"> slideshow </span><a href="assets/CSN_presentation.pdf">PPT at SGP</a></div>-->
+                <div><span class="material-icons"> format_quote </span><a href="">BibTeX</a></div>
+            </div>
+        </div>
+    </section>
 </div>
+
+
 
 </body>
 </html>
