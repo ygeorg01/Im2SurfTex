@@ -104,6 +104,8 @@ section {
 
 .controls {
     margin-top: 10px;
+    display: flex;
+    justify-content: center;
 }
 .row {
     margin: 16px 0px 16px 0px;
