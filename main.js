@@ -64,7 +64,7 @@ function createViewer(container, path) {
     console.log(container.clientHeight)
     // Lighting
     const light = new THREE.DirectionalLight(0xffffff, 1);
-    light.position.set(5, 5, 5);
+    light.position.set(0, 0, 1);
     scene.add(light);
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 
