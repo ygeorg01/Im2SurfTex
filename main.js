@@ -75,7 +75,7 @@ function createViewer(container, path) {
         object = gltf.scene;
         object.scale.set(1, 1, 1);
         object.position.set(0, 0, 0);
-        camera.position.set(0, 0.4, 1.5);
+        camera.position.set(0, 0.4, 2);
         model = object;
         scene.add(object);
     },
