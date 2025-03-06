@@ -2,7 +2,7 @@
 
 ## Code Release
 * Coming Soon...
-* 
+
 ## Cite
 ```
 @article{Im2SurfTex:2025,
