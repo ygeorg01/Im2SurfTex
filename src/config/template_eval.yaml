@@ -1,0 +1,25 @@
+# Test args
+render_size: 512
+seed: 8
+out_dir: ""
+log_dir: None
+use_amp: False
+use_bf16: False
+mesh_paths: 'config/mesh.json'
+
+# Texture config
+tex_size: 1024 # Texture map output size
+empty_area: [255, 51, 255] # Empty Area Color
+inpaint_strategy: True
+cameras_paint3D: True # Use paint3D camera locations
+camera_locations: [[1.5, 1.5, 1.5, 1.5, 1.5, 1.5], [25, 25, 25, 25, 40, -40], [0, 90, 180, 270, 45, -45]] # turn cameras_paint3D to False if you want to use this set of cameras
+diffusion_noise: [1., 0.5] # Defines inference iteration number
+inference_iterations: 3
+
+# Mesh Scaling Parameters
+scale_mesh: 0.6 # 0.6 for paint3D cameras
+dy_mesh: 0.25 # 0.25 for paint3D cameras
+
+# GPU settings
+ddp: False
+n_gpus: 1

@@ -1,0 +1,13 @@
+# training
+render_size: 1024
+seed: 8
+num_epochs: 50
+log_dir: ""
+train_split: '/media/yiangos/BigData/Urban_Enviroment_Understanding_Project/trainset_train.txt'
+dataset_dir: '/media/yiangos/BigData/Urban_Enviroment_Understanding_Project/objaverse/'
+renders_dir: '/media/yiangos/BigData/Urban_Enviroment_Understanding_Project/objaverse_renders/'
+val_percentage: 0.001
+ddp: False
+n_gpus: 1
+use_amp: False
+use_bf16: False

@@ -1,0 +1,12 @@
+[
+  {"id": "001", "text": "a boombox radio", "root_dir": "assets/"},
+  {"id": "002", "text": "a chocolate donut", "root_dir": "assets/"},
+  {"id": "003", "text": "a lemon", "root_dir": "assets/"},
+  {"id": "004", "text": "a sunflower", "root_dir": "assets/"},
+  {"id": "006", "text": "a lantern", "root_dir": "assets/"},
+  {"id": "007", "text": "a plant", "root_dir": "assets/"},
+  {"id": "008", "text": "an apple", "root_dir": "assets/"},
+  {"id": "009", "text": "a rocking old chair", "root_dir": "assets/"},
+  {"id": "010", "text": "a crown", "root_dir": "assets/"}
+]
+
