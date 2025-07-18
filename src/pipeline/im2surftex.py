@@ -490,7 +490,6 @@ class Im2SurfTexModel(L.LightningModule):
 
         if out_dir != None:
             if os.path.exists(os.path.join(out_dir, 'geod_info_'+str(res)+'.pt')):
-                print('geod info loaded')
                 return torch.load(os.path.join(out_dir, 'geod_info_'+str(res)+'.pt'))
 
         tex_pixel_geod_info = -torch.ones(tex_pixel_coordinates.shape).to(tex_pixel_coordinates.device)[
@@ -499,9 +498,7 @@ class Im2SurfTexModel(L.LightningModule):
 
         # Gather Geodesic information
         window_ = 5000
-
         for i in range(0, nn_ids[active_view_texels].shape[0], window_):
-            print('geod info extracting')
             nn_ids_acti = nn_ids[active_view_texels].unsqueeze(0)
             index_diff = torch.arange(window_).unsqueeze(0).unsqueeze(-1).to(
                 nn_ids.device)  # .repeat(nn_ids.shape[0], 1, window_)

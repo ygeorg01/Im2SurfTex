@@ -102,45 +102,27 @@ from tqdm import tqdm
 import os
 from torchvision.utils import save_image
 def inpaint_viewpoint(sd_cfg, latents, cnet, depth_im, outdir, iter, inpaint_view_ids=['0', '1']):
-    # projection
-    # print(f"Project inpaint view {inpaint_view_ids}...")
-    # inpaint_view_ids = ['0', '1']
-    # t = '_'+inpaint_view_ids[0]+'_'+inpaint_view_ids[1]+'_'
+
     t = '_'+str(iter)+'_'
 
     inpaint_used_key = ["image", "depth", "uncolored_mask"]
-    # for i, one_batch_id in tqdm(enumerate(inpaint_view_ids)):
-    #
-    #     one_batch_img = []
-    #     one_batch_img.append(latents.permute(0,3,1,2))
-    #     one_batch_img.append(depth_im)
-    #     # print('latent: ', latents.shape, torch.tensor([1., 51 / 255, 1.]).shape)
-    #     print((latents - torch.tensor([1., 51 / 255, 1.])).shape)
-    #     masked_img_mesh = torch.sum(latents - torch.tensor([1., 51 / 255, 1.]).to(latents.device), dim=-1)
-    #     one_batch_img.append((masked_img_mesh < 0.1).float().unsqueeze(0))
-        # print(latents.shape, depth_im.shape, masked_img_mesh.shape)
-        # exit()
-    # for i, img in enumerate(zip(*one_batch_img)):
+
     one_batch_img = []
     latents = latents.permute(0,3,1,2)
     one_batch_img.append(torch.cat((latents[[0]],latents[[1]]), dim=-1))
     one_batch_img.append(torch.cat((depth_im[[0]],depth_im[[1]]), dim=-1))
     base_color = torch.tensor([1., 51 / 255, 1.]).unsqueeze(0).unsqueeze(-1).unsqueeze(-1)
-    # print('base color shape: ', base_color.shape, one_batch_img[0].shape)
-    # exit()
-    # print(latents)
+
     masked_img_mesh = torch.sum(torch.abs(one_batch_img[0] - base_color.to(latents.device)), dim=1, keepdim=True)
-    # print(masked_img_mesh.shape, (latents - base_color.to(latents.device)).shape)
-    # exit()
+
     one_batch_img.append(masked_img_mesh<0.1)
 
     for i, img in enumerate(one_batch_img):
 
-        print('imag : ', img.shape)
-        # img = torch.cat(img, dim=3)
+
         if img.size(1) == 1:
             img = img.repeat(1, 3, 1, 1)
-        # t = '_'.join(map(str, one_batch_id))
+
         name = inpaint_used_key[i]
         if name == "uncolored_mask":
             img[img>0] = 1.

@@ -443,10 +443,8 @@ def init_camera_lookat(dist, elev, azim, image_size, device, fov=60, at=torch.Fl
                           [0.0000, -0.2333, 1.4817], [-5.9605e-08, -2.3331e-01, 1.4817e+00],
                           [-0.0000e+00, -1.4540e-01, 1.4929e+00], [-0.0000e+00, -1.0895e-01, 1.4960e+00]])
     else:
-        # print('dists: ', dist)
         R, T = look_at_view_transform(dist, elev, azim, at=at)
-    # print('R shape: ', paint3D, R.shape)
-    # print('T shape: ', T.shape)
+
     cameras = FoVPerspectiveCameras(R=R, T=T, device=device, fov=fov)
 
     return cameras

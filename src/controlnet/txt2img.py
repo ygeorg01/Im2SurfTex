@@ -60,7 +60,6 @@ class txt2imgControlNet():
 
         seed = int(time.time()) if config.seed == -1 else config.seed
         generator = torch.manual_seed(int(seed))
-        print('strength: ', config.strength)
 
         latent = Image.open(config.latent_image_path)
         latent = latent.resize(size=(w, h), resample=Image.Resampling.BICUBIC)

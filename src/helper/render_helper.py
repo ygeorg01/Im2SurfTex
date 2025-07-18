@@ -719,24 +719,11 @@ def render_depth_normals_tex_with_uvs(mesh, tex, tex_hd, camera_params, image_si
         else:
             gen_imgs_hd = images_set['gen_img']#.permute(0,2,3,1)
 
-        # print(gen_imgs_hd.to('cuda').shape, xyz_global.to('cuda').shape, relative_depth.to('cuda').shape, normals_view.to('cuda').shape)
-        # save_image(gen_imgs_hd.permute(0,3,1,2), '1.png')
-        # save_image(xyz_global.permute(0,3,1,2), '2.png')
-        # save_image(relative_depth.permute(0,3,1,2), '3.png')
-        # save_image(normals_view.permute(0,3,1,2), '4.png')
-        # return
-        # print(gen_imgs_hd.to('cuda').shape, xyz_global.to('cuda').shape, relative_depth.to('cuda').shape, normals_view.to('cuda').shape)
-        # print('normal global shape: ', normals_global.shape)
-        # save_image(normals_global.permute(0,3,1,2), 'normals.png')
-        # save_image(xyz_global.permute(0,3,1,2), 'xyz.png')
+
         feature_map = torch.cat((gen_imgs_hd.to('cuda'), xyz_global.to('cuda'), relative_depth.to('cuda'), normals_view.to('cuda')), dim=-1)
-        # exit()
-        # feature_map = torch.cat((images_set['gen_img'], zbuf, xyz_global, relative_depth, normals_view), dim=-1)
 
         # backproject pixels to texel locations
         tex_features = backproject_features_with_uvs(uvs_coords.to('cuda'), tex.to('cuda'), feature_map.to('cuda'), window_size, 'cuda', blend_tex_size=blend_tex_size)
-
-        print('tex features shape : ', tex_features.shape)
 
         images_set['tex_features'] = tex_features
 

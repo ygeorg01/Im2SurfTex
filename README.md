@@ -61,7 +61,7 @@ python src/scripts/texture_mesh.py --out_dir ./textured_shapes --checkpoint_path
 
 ## 🙌 Acknowledgments
 
-- **[Paint3D]**, This project used multiple parts form paint3D repository. Please also consider also this work.
+- **[Paint3D]**, This project used multiple parts from paint3D repository. Please also consider this work.
 
 
 ## 📎 Citation

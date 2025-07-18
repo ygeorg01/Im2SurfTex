@@ -12,16 +12,12 @@ from PIL import Image
 from pathlib import Path
 from omegaconf import OmegaConf
 
-from src.controlnet.diffusers_cnet_txt2img import txt2imgControlNet
 from src.controlnet.diffusers_cnet_inpaint import inpaintControlNet
 from src.controlnet.diffusers_cnet_img2img import img2imgControlNet
 from paint3d.dataset import init_dataloaders
 from paint3d import utils
 from paint3d.models.textured_mesh import TexturedMeshModel
 from src.pipeline.generate_texture import store_mesh
-
-
-# from paint3d.trainer import dr_eval, forward_texturing
 
 
 def UV_inpaint(sd_cfg, cnet, outdir):

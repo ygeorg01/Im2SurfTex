@@ -18,7 +18,6 @@ from pytorch3d.io import save_obj
 
 def generate_text2img_inpaint(config, batch, net, inpaint_cnet, sd_cfg, cameras, mesh_idx, texture, prev_views, iteration):
 
-    # print('mesh: ', batch['mesh'])
     batch['mesh_struct'] = init_mesh(batch['mesh'], texture.to(batch['mesh']['verts'].device), batch['mesh']['verts'])
 
     # Initialize text
@@ -39,6 +38,9 @@ def generate_text2img_inpaint(config, batch, net, inpaint_cnet, sd_cfg, cameras,
     elif iteration==2:
         views_colored = torch.cat((prev_views, views_colored), dim=1)
 
+    print('views colored shape: ', views_colored.shape)
+    print('len cameras shape: ', len(cameras))
+
     # Neural Back Projection
     texture, position_uv, textured_texel_mask = neural_backprojection(config, batch, net, views_colored, cameras, fragments, out_dir)
 
@@ -47,7 +49,6 @@ def generate_text2img_inpaint(config, batch, net, inpaint_cnet, sd_cfg, cameras,
 
 def generate_text2img(config, batch, net, depth_cnet, sd_cfg, cameras, mesh_idx, texture, iteration):
 
-    # print('mesh: ', batch['mesh'])
     batch['mesh_struct'] = init_mesh(batch['mesh'], texture.to(batch['mesh']['verts'].device), batch['mesh']['verts'])
 
     # Initialize text
@@ -65,14 +66,6 @@ def generate_text2img(config, batch, net, depth_cnet, sd_cfg, cameras, mesh_idx,
 
     return texture, position_uv, textured_texel_mask, views_colored
 
-
-
-# def generate_texture_one_iteration(config, batch, net, depth_cnet, inpaint_cnet, sd_cfg, cameras, mesh_idx, iteration):
-
-
-
-    # return texture
-
 @torch.no_grad()
 def generate_texture(config, batch, net, depth_cnet, inpaint_cnet, sd_cfg, cameras, mesh_idx, paint3D_strategy=False):
 
@@ -82,6 +75,16 @@ def generate_texture(config, batch, net, depth_cnet, inpaint_cnet, sd_cfg, camer
 
     texture=None
     inpaint_set = [[0,1], [0,1,2,3], [0,1,2,3,4,5]]
+    # Check if geodesic info exist
+    out_dir = os.path.join(config.out_dir, str(mesh_idx).zfill(3))
+    if not os.path.exists(os.path.join(out_dir, 'geod_info_' + str(config.tex_size) + '.pt')):
+        if texture == None:
+            texture = batch['tex'].permute(0, 3, 1, 2)
+        # Run text to image to compute geodesic info if not exists
+        texture, position_uv, textured_texel_mask, _ = generate_text2img(config, batch, net, depth_cnet, sd_cfg.txt2img,
+                                                                         cameras, mesh_idx, texture, 0)
+
+
     for iteration in range(config.inference_iterations):
         if texture == None:
             texture = batch['tex'].permute(0, 3, 1, 2)
@@ -217,6 +220,8 @@ def neural_backprojection(config, batch, net, gen_images, cameras, fragments, ou
                                                                   nn_gamma.to(tex.device),
                                                                   nn_theta.to(tex.device),
                                                                   nn_dists.to(tex.device), 1, out_dir)
+
+
 
 
     return texture, images_set['uv_loc'], images_set['active_texels']

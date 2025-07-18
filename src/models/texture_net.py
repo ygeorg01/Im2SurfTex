@@ -152,7 +152,7 @@ class TextureNet(nn.Module):
         window_bl = 10000
         for attn, norm_1, ff, norm_2 in self.blending_layers:
             for i in range(0, h.shape[0], window_bl):
-                #        print('blending idxes: ', attn, i, i+window_bl, Ps.shape)
+
                 loc_enc_ps = positionalencoding1d(Ps[i:i + window_bl, :, :3], self.pos_encoding_xyz)
                 normal_enc_ps = positionalencoding1d(Ps[i:i + window_bl, :, 3:6], self.pos_encoding_other)
                 view_surf_enc_ps = positionalencoding1d(Ps[i:i + window_bl, :, 6:], self.pos_encoding_other)

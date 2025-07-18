@@ -131,4 +131,3 @@ if __name__ == '__main__':
 
         # Run Inpaint and HD module
         inpaint_and_refine(config, batch, batch['id'][0], os.path.join(config.out_dir, batch['id'][0].zfill(3)))
-
