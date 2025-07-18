@@ -92,7 +92,7 @@ class inpaintControlNet():
 
 
     def make_inpaint_condition(self, image, image_mask):
-        image = np.array(image.convert("RGB")).astype(np.float32) / 255.0
+
         image = np.array(image.convert("RGB")).astype(np.float32) / 255.0
         image_mask = np.array(image_mask.convert("L")).astype(np.float32) / 255.0
 
