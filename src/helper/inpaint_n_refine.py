@@ -36,8 +36,7 @@ def UV_inpaint(sd_cfg, cnet, outdir):
     p_cfg.image_path = albedo_path
     p_cfg.mask_path =  mask_path
     p_cfg.controlnet_units[0].condition_image_path = UV_pos_path
-    print('p_cfg: ', p_cfg)
-    exit()
+
     images = cnet.infernece(config=p_cfg)
     res = []
     for i, img in enumerate(images):
