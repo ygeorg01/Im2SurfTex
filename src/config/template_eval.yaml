@@ -8,7 +8,7 @@ use_bf16: False
 mesh_paths: 'config/mesh.json'
 
 # Texture config
-tex_size: 1024 # Texture map output size
+tex_size: 256 # Texture map output size
 empty_area: [255, 51, 255] # Empty Area Color
 inpaint_strategy: True
 cameras_paint3D: True # Use paint3D camera locations

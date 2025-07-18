@@ -1,4 +1,3 @@
-
 txt2img:
   "sd_model_key": "runwayml/stable-diffusion-v1-5"
   "ip_adapter_image_path":
@@ -22,7 +21,7 @@ inpaint:
   # run
   "image_path":
   "mask_path":
-  "ip_adapter_image_path": 
+  "ip_adapter_image_path":
   "prompt":
   "negative_prompt":
   "seed":
@@ -41,4 +40,3 @@ inpaint:
       "controlnet_key": "lllyasviel/control_v11p_sd15_inpaint"
       "condition_image_path": ""
       "weight": 0.5
-

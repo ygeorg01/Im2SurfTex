@@ -36,7 +36,8 @@ def UV_inpaint(sd_cfg, cnet, outdir):
     p_cfg.image_path = albedo_path
     p_cfg.mask_path =  mask_path
     p_cfg.controlnet_units[0].condition_image_path = UV_pos_path
-
+    print('p_cfg: ', p_cfg)
+    exit()
     images = cnet.infernece(config=p_cfg)
     res = []
     for i, img in enumerate(images):
@@ -99,7 +100,7 @@ def inpaint_and_refine(config, batch, mesh_idx, out_dir, sd_config='stable-diffu
 
     opt = {}
     opt['render_config'] = 'src/config/train_config_paint3d.py'
-    opt['sd_config'] = 'src/controlnet/config/UV_based_inpaint_template.yaml'
+    opt['sd_config'] = 'src/config/UV_based_inpaint_template.yaml'
     opt['outdir'] = out_dir
     opt['texture_path'] = os.path.join(out_dir, 'mesh.png')
     opt['prompt'] = "UV map , "+batch['text'][0]+" , high quality, best quality"

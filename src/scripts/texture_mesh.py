@@ -58,7 +58,7 @@ def init_args():
 
     parser.add_argument("--config", type=str, default="src/config/template_eval.yaml")
     parser.add_argument("--mesh_json", type=str, default='src/config/mesh.json')
-    parser.add_argument("--sd_config", type=str, default='src/controlnet/config/depth_based_inpaint_eval_template.yaml')
+    parser.add_argument("--sd_config", type=str, default='src/config/depth_based_inpaint_eval_template.yaml')
     # Model Parameters
     parser.add_argument("--cross_attention_window", type=int, default=3)
     parser.add_argument("--checkpoint_path", type=str, default="./checkpoints/latest_weights.pt")
